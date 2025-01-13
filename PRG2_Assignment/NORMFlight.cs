@@ -26,5 +26,10 @@ namespace PRG2_Assignment
             }
             return totalFee;
         }
+
+        public override string ToString()
+        {
+            return $"Fees: ${CalculateFees():F2}";
+        }
     }
 }
