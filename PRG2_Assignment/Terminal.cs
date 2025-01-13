@@ -23,17 +23,19 @@ namespace PRG2_Assignment
 
         public bool AddAirline(Airline airline)
         {
-
+            Airlines[airline.Name] = airline;
+            return true;
         }
 
         public bool AddBoardingGate(BoardingGate gate)
         {
-
+            BoardingGates[gate.GateName] = gate;
+            return true;
         }
 
         public Airline GetAirlineFromFlight(Flight flight)
         {
-
+            return 
         }
 
         public void PrintAirlineFees()
