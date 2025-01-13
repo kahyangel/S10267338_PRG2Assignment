@@ -48,12 +48,19 @@ Console.WriteLine("Loading Airlines..." +
     "\nLoading Flights..." +
     $"\n{flightCount} Flights Loaded!");
 
+// Main loop
+while (true)
+{
+    DisplayMenu();
+    int option = Convert.ToInt32(Console.ReadLine());
+}
+
 
 
 void DisplayMenu()
 // Displays the menu and options
 {
-    Console.WriteLine("=============================================" +
+    Console.Write("=============================================" +
         "\nWelcome to Changi Airport Terminal 5" +
         "\n=============================================" +
         "\n1. List All Flights" +
@@ -63,5 +70,6 @@ void DisplayMenu()
         "\n5. Display Airline Flights" +
         "\n6. Modify Flight Details" +
         "\n7. Display Flight Schedule" +
-        "\n0. Exit");
+        "\n0. Exit\n" +
+        "\nPlease select your option: ");
 }
