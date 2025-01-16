@@ -29,19 +29,37 @@ namespace PRG2_Assignment
 
         public bool AddAirline(Airline airline)
         {
-            Airlines[airline.Name] = airline;
+            if (Airlines.ContainsKey(airline.Code))
+            {
+                return false;
+            }
+            Airlines[airline.Code] = airline;
             return true;
         }
 
         public bool AddBoardingGate(BoardingGate gate)
         {
+            if (BoardingGates.ContainsKey(gate.GateName))
+            {
+                return false;
+            }
             BoardingGates[gate.GateName] = gate;
             return true;
         }
 
         public Airline GetAirlineFromFlight(Flight flight)
         {
-            return 
+            string flightCode = flight.FlightNumber.Substring(0, 2);
+            Airline? airline = null;
+
+            foreach (KeyValuePair<string, Airline> kvp in Airlines)
+            {
+                if (kvp.Key == flightCode)
+                {
+                    airline = kvp.Value;
+                }
+            }
+            return airline;
         }
 
         public void PrintAirlineFees()

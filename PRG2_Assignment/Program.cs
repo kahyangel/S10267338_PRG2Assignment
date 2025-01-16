@@ -8,10 +8,12 @@ using PRG2_Assignment;
 // Create Terminal object
 Terminal terminal = new Terminal("Terminal 5");
 
+// Create dictionary to store flight objects
+Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
 
 LoadAirlines(terminal);
 LoadBoardingGate(terminal);
-LoadFlights(terminal);
+LoadFlights(flightDict);
 DisplayLoading(terminal);
 
 // Main loop
