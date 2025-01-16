@@ -169,7 +169,10 @@ void LoadBoardingGate(Terminal t)
 
 void ListFlights(Terminal t)
 {
-    Console.WriteLine("Flight Number   Airline Name           Origin                 Destination            Expected Departure/Arrival Time");
+    Console.WriteLine("=============================================" +
+        "\nList of Flights for Changi Airport Terminal 5" +
+        "\n=============================================" +
+        "\nFlight Number   Airline Name           Origin                 Destination            Expected Departure/Arrival Time");
     foreach (Flight f in t.Flights.Values)
     {
         Console.WriteLine($"{f.FlightNumber, -16}{t.GetAirlineFromFlight(f).Name, -23}{f.Origin, -23}{f.Destination, -23}{f.ExpectedTime, -31}");
