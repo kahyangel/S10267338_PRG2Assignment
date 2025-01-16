@@ -1,21 +1,24 @@
 ﻿//==========================================================
 // Student Name : Wyse Lee Hong Yao (S10268134D)
-// Student Name : Tang Kah Yan
+// Student Name : Tang Kah Yan (S10267338C)
 //==========================================================
 
 using PRG2_Assignment;
 
-// Create dictionary to store flight objects with flight number as key
-Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
+// Create Terminal object
+Terminal terminal = new Terminal("Terminal 5");
 
-LoadFlights(flightDict);
-DisplayLoading(airlineDict, boardingGateDict, flightDict);
+
+LoadAirlines(terminal);
+LoadBoardingGate(terminal);
+LoadFlights(terminal);
+DisplayLoading(terminal);
 
 // Main loop
 while (true)
 {
-    DisplayLoading(airlineDict, boardingGateDict, flightDict);
     DisplayMenu();
+    
     int option = Convert.ToInt32(Console.ReadLine());
 }
 
@@ -38,15 +41,15 @@ void DisplayMenu()
         "\nPlease select your option: ");
 }
 
-void DisplayLoading(airlineDict, boardingGateDict, flightDict)
+void DisplayLoading(Terminal t)
 {
     // Loads number of airlines, boarding gates, and flights
     Console.WriteLine("Loading Airlines..." +
-        $"\n{airlineDict.Count} Airlines Loaded!" +
+        $"\n{t.Airlines.Count} Airlines Loaded!" +
         "\nLoading Boarding Gates..." +
-        $"\n{boardingGateDict.Count} Boarding Gates Loaded!" +
+        $"\n{t.BoardingGates.Count} Boarding Gates Loaded!" +
         "\nLoading Flights..." +
-        $"\n{flightDict.Count} Flights Loaded!");
+        $"\n{t.Flights.Count} Flights Loaded!");
 }
 
 void LoadFlights(Dictionary<string, Flight> fDict)
@@ -87,6 +90,46 @@ void LoadFlights(Dictionary<string, Flight> fDict)
             }
 
             fDict[flightNum] = newFlight;
+        }
+    }
+}
+
+void LoadAirlines(Terminal t)
+{
+    using (StreamReader sr = new StreamReader("airlines.csv"))
+    {
+        // Reads the header of flights.csv
+        string? s = sr.ReadLine();
+
+        // Reads the contents of flights.csv and creates flight objects
+        while ((s = sr.ReadLine()) != null)
+        {
+            string[] airlineDetails = s.Split(",");
+            string airlineName = airlineDetails[0];
+            string airlineCode = airlineDetails[1];
+            Airline airline = new Airline(airlineName, airlineCode);
+            t.AddAirline(airline);
+        }
+    }
+}
+
+void LoadBoardingGate(Terminal t)
+{
+    using (StreamReader sr = new StreamReader("boardinggates.csv"))
+    {
+        // Reads the header of flights.csv
+        string? s = sr.ReadLine();
+
+        // Reads the contents of flights.csv and creates flight objects
+        while ((s = sr.ReadLine()) != null)
+        {
+            string[] bgDetails = s.Split(",");
+            string bgName = bgDetails[0];
+            bool needDDJB = Convert.ToBoolean(bgDetails[1]);
+            bool needCFFT = Convert.ToBoolean(bgDetails[2]);
+            bool needLWTT = Convert.ToBoolean(bgDetails[3]);
+            BoardingGate boardingGate = new BoardingGate(bgName, needDDJB, needCFFT, needLWTT);
+            t.AddBoardingGate(boardingGate);
         }
     }
 }
