@@ -1,56 +1,15 @@
 ﻿using PRG2_Assignment;
 
-// keep track of number of airlines, boarding gates, and flights
-int airlineCount = 0;
-int boardingGateCount = 0;
-int flightCount = 0;
+// Create dictionary to store flight objects with flight number as key
+Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
 
-using (StreamReader sr = new StreamReader("airlines.csv"))
-{
-    // reads the header of flights.csv
-    string? s = sr.ReadLine();
-
-    // reads the contents of flights.csv
-    while ((s = sr.ReadLine()) != null)
-    {
-        airlineCount++;
-    }
-}
-
-using (StreamReader sr = new StreamReader("boardinggates.csv"))
-{
-    // reads the header of flights.csv
-    string? s = sr.ReadLine();
-
-    // reads the contents of flights.csv
-    while ((s = sr.ReadLine()) != null)
-    {
-        boardingGateCount++;
-    }
-}
-
-using (StreamReader sr = new StreamReader("flights.csv"))
-{
-    // reads the header of flights.csv
-    string? s = sr.ReadLine();
-    
-    // reads the contents of flights.csv
-    while ((s = sr.ReadLine()) != null)
-    {
-        flightCount++;
-    }
-}
-
-Console.WriteLine("Loading Airlines..." +
-    $"\n{airlineCount} Airlines Loaded!" +
-    "\nLoading Boarding Gates..." +
-    $"\n{boardingGateCount} Boarding Gates Loaded!" +
-    "\nLoading Flights..." +
-    $"\n{flightCount} Flights Loaded!");
+LoadFlights(flightDict);
+DisplayLoading(airlineDict, boardingGateDict, flightDict);
 
 // Main loop
 while (true)
 {
+    DisplayLoading(airlineDict, boardingGateDict, flightDict);
     DisplayMenu();
     int option = Convert.ToInt32(Console.ReadLine());
 }
@@ -72,4 +31,57 @@ void DisplayMenu()
         "\n7. Display Flight Schedule" +
         "\n0. Exit\n" +
         "\nPlease select your option: ");
+}
+
+void DisplayLoading(airlineDict, boardingGateDict, flightDict)
+{
+    // Loads number of airlines, boarding gates, and flights
+    Console.WriteLine("Loading Airlines..." +
+        $"\n{airlineDict.Count} Airlines Loaded!" +
+        "\nLoading Boarding Gates..." +
+        $"\n{boardingGateDict.Count} Boarding Gates Loaded!" +
+        "\nLoading Flights..." +
+        $"\n{flightDict.Count} Flights Loaded!");
+}
+
+void LoadFlights(Dictionary<string, Flight> fDict)
+{
+    using (StreamReader sr = new StreamReader("flights.csv"))
+    {
+        // Reads the header of flights.csv
+        string? s = sr.ReadLine();
+
+        // Reads the contents of flights.csv and creates flight objects
+        while ((s = sr.ReadLine()) != null)
+        {
+            string[] flightDetails = s.Split(",");
+
+            string flightNum = flightDetails[0];
+            string origin = flightDetails[1];
+            string destination = flightDetails[2];
+            DateTime flightTime = Convert.ToDateTime(flightDetails[3]);
+            string specialCode = flightDetails[4];
+
+            Flight? newFlight = null;
+
+            if (specialCode == "DDJB")
+            {
+                newFlight = new DDJBFlight(flightNum, origin, destination, flightTime);
+            }
+            else if (specialCode == "CFFT")
+            {
+                newFlight = new CFFTFlight(flightNum, origin, destination, flightTime);
+            }
+            else if (specialCode == "LWTT")
+            {
+                newFlight = new LWTTFlight(flightNum, origin, destination, flightTime);
+            }
+            else if (specialCode == "")
+            {
+                newFlight = new NORMFlight(flightNum, origin, destination, flightTime);
+            }
+
+            fDict[flightNum] = newFlight;
+        }
+    }
 }

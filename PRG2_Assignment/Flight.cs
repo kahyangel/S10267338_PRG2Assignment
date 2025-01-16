@@ -12,16 +12,15 @@ namespace PRG2_Assignment
         public string Origin { get; set; }
         public string Destination { get; set; }
         public DateTime ExpectedTime { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } = "On Time";
 
         public Flight() { }
-        public Flight(string flightNumber, string origin, string destination, DateTime expectedTime, string status)
+        public Flight(string flightNumber, string origin, string destination, DateTime expectedTime)
         {
             FlightNumber = flightNumber;
             Origin = origin;
             Destination = destination;
             ExpectedTime = expectedTime;
-            Status = status;
         }
 
         public abstract double CalculateFees();

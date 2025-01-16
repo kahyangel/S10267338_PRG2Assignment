@@ -13,9 +13,9 @@ namespace PRG2_Assignment
 
         //Constructor
         public DDJBFlight() { }
-        public DDJBFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status, double requestFee) : base(flightNumber, origin, destination, expectedTime, status)
+        public DDJBFlight(string flightNumber, string origin, string destination, DateTime expectedTime) : base(flightNumber, origin, destination, expectedTime)
         {
-            RequestFee = requestFee;
+            RequestFee = 300;
         }
 
         //Methods

@@ -13,9 +13,9 @@ namespace PRG2_Assignment
 
         //Constructor
         public CFFTFlight() { }
-        public CFFTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status, double requestFee) : base(flightNumber, origin, destination, expectedTime, status)
+        public CFFTFlight(string flightNumber, string origin, string destination, DateTime expectedTime) : base(flightNumber, origin, destination, expectedTime)
         {
-            RequestFee = requestFee;
+            RequestFee = 150;
         }
 
         //Methods
