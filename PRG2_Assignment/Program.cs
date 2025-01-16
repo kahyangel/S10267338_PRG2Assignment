@@ -1,4 +1,9 @@
-﻿using PRG2_Assignment;
+﻿//==========================================================
+// Student Name : Wyse Lee Hong Yao (S10268134D)
+// Student Name : Tang Kah Yan
+//==========================================================
+
+using PRG2_Assignment;
 
 // Create dictionary to store flight objects with flight number as key
 Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
