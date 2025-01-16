@@ -29,10 +29,10 @@ namespace PRG2_Assignment
             SupportsLWTT = supportsLWTT;
         }
 
-        public double CalculateFees()
-        {
+        //public double CalculateFees()
+        //{
 
-        }
+        //}
 
         public override string ToString()
         {

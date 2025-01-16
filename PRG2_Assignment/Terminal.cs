@@ -62,10 +62,10 @@ namespace PRG2_Assignment
             return airline;
         }
 
-        public void PrintAirlineFees()
-        {
+        //public void PrintAirlineFees()
+        //{
 
-        }
+        //}
 
         public override string ToString()
         {

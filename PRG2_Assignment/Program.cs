@@ -8,12 +8,9 @@ using PRG2_Assignment;
 // Create Terminal object
 Terminal terminal = new Terminal("Terminal 5");
 
-// Create dictionary to store flight objects
-Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
-
 LoadAirlines(terminal);
 LoadBoardingGate(terminal);
-LoadFlights(flightDict);
+LoadFlights(terminal);
 DisplayLoading(terminal);
 
 // Main loop
@@ -22,6 +19,40 @@ while (true)
     DisplayMenu();
     
     int option = Convert.ToInt32(Console.ReadLine());
+    if (option == 1)
+    {
+        ListFlights(terminal);
+    }
+    else if (option == 2)
+    {
+
+    }
+    else if (option == 3)
+    {
+
+    }
+    else if (option == 4)
+    {
+
+    }
+    else if (option == 5)
+    {
+
+    }
+    else if (option == 6)
+    {
+
+    }
+    else if (option == 7)
+    {
+
+    }
+    else if (option == 0)
+    {
+
+    }
+
+    Console.WriteLine();
 }
 
 
@@ -54,7 +85,7 @@ void DisplayLoading(Terminal t)
         $"\n{t.Flights.Count} Flights Loaded!");
 }
 
-void LoadFlights(Dictionary<string, Flight> fDict)
+void LoadFlights(Terminal t)
 {
     using (StreamReader sr = new StreamReader("flights.csv"))
     {
@@ -91,7 +122,7 @@ void LoadFlights(Dictionary<string, Flight> fDict)
                 newFlight = new NORMFlight(flightNum, origin, destination, flightTime);
             }
 
-            fDict[flightNum] = newFlight;
+            t.Flights[flightNum] = newFlight;
         }
     }
 }
@@ -133,5 +164,14 @@ void LoadBoardingGate(Terminal t)
             BoardingGate boardingGate = new BoardingGate(bgName, needDDJB, needCFFT, needLWTT);
             t.AddBoardingGate(boardingGate);
         }
+    }
+}
+
+void ListFlights(Terminal t)
+{
+    Console.WriteLine("Flight Number   Airline Name           Origin                 Destination            Expected Departure/Arrival Time");
+    foreach (Flight f in t.Flights.Values)
+    {
+        Console.WriteLine($"{f.FlightNumber, -16}{t.GetAirlineFromFlight(f).Name, -23}{f.Origin, -23}{f.Destination, -23}{f.ExpectedTime, -31}");
     }
 }

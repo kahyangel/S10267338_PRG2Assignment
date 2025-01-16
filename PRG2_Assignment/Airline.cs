@@ -25,20 +25,20 @@ namespace PRG2_Assignment
             Code = code;
         }
 
-        public bool AddFlight(Flight)
-        {
+        //public bool AddFlight(Flight)
+        //{
 
-        }
+        //}
 
-        public double CalculateFees()
-        {
+        //public double CalculateFees()
+        //{
 
-        }
+        //}
 
-        public bool RemoveFlight(Flight)
-        {
+        //public bool RemoveFlight(Flight)
+        //{
 
-        }
+        //}
 
         public override string ToString()
         {
