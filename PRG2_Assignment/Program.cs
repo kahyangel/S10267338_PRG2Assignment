@@ -25,7 +25,7 @@ while (true)
     }
     else if (option == 2)
     {
-
+        ListBoardingGates(terminal);
     }
     else if (option == 3)
     {
@@ -174,4 +174,14 @@ void ListFlights(Terminal t)
     {
         Console.WriteLine($"{f.FlightNumber, -16}{t.GetAirlineFromFlight(f).Name, -23}{f.Origin, -23}{f.Destination, -23}{f.ExpectedTime, -31}");
     }
+}
+
+void ListBoardingGates(Terminal t)
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Gate Name",-16}{ "DDJB",-23}{ "CFFT",-23}LWTT");
+    foreach (BoardingGate bg in t.BoardingGates.Values)
+    Console.WriteLine($"{bg.GateName,-16}{bg.SupportsDDJB, -23}{bg.SupportsCFFT, -23}{bg.SupportsLWTT}");
 }
