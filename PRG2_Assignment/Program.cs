@@ -63,7 +63,55 @@ while (true)
     }
     else if (option == 4)
     {
+        bool isCreating = true;
+        while (isCreating)
+        {
+            Console.Write("Enter flight number: ");
+            string? flightNum = Console.ReadLine();
 
+            Console.Write("Enter origin: ");
+            string? origin = Console.ReadLine();
+
+            Console.Write("Enter destination: ");
+            string? destination = Console.ReadLine();
+
+            Console.Write("Enter expected departure/arrival time (hh:mm am/pm): ");
+            DateTime flightTime = Convert.ToDateTime(Console.ReadLine());
+
+            Console.Write("Enter special request code (enter N if none): ");
+            string? specialCode = Console.ReadLine();
+            if (specialCode == "N")
+            {
+                specialCode = "";
+            }
+
+            Flight? newFlight = CreateNewFlight(terminal, flightNum, origin, destination, flightTime, specialCode);
+
+            terminal.Flights[newFlight.FlightNumber] = newFlight;
+            AppendFlightData(newFlight, specialCode);
+            Console.WriteLine($"Flight {newFlight.FlightNumber} has been created successfully!\n");
+
+            while (true)
+            {
+                Console.WriteLine("Would you like to create another flight? (Y/N)");
+                string? choice = Console.ReadLine();
+
+                if (choice == "N")
+                {
+                    isCreating = false;
+                    break;
+                }
+                else if (choice == "Y")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Please enter a valid choice");
+                    continue;
+                }
+            }
+        }
     }
     else if (option == 5)
     {
@@ -115,6 +163,30 @@ void DisplayLoading(Terminal t)
         $"\n{t.Flights.Count} Flights Loaded!");
 }
 
+Flight? CreateNewFlight(Terminal t, string flightNum, string origin, string destination, DateTime flightTime, string specialCode)
+{
+    Flight? newFlight = null;
+
+    if (specialCode == "DDJB")
+    {
+        newFlight = new DDJBFlight(flightNum, origin, destination, flightTime);
+    }
+    else if (specialCode == "CFFT")
+    {
+        newFlight = new CFFTFlight(flightNum, origin, destination, flightTime);
+    }
+    else if (specialCode == "LWTT")
+    {
+        newFlight = new LWTTFlight(flightNum, origin, destination, flightTime);
+    }
+    else if (specialCode == "")
+    {
+        newFlight = new NORMFlight(flightNum, origin, destination, flightTime);
+    }
+
+    return newFlight;
+}
+
 void LoadFlights(Terminal t)
 {
     using (StreamReader sr = new StreamReader("flights.csv"))
@@ -133,24 +205,7 @@ void LoadFlights(Terminal t)
             DateTime flightTime = Convert.ToDateTime(flightDetails[3]);
             string specialCode = flightDetails[4];
 
-            Flight? newFlight = null;
-
-            if (specialCode == "DDJB")
-            {
-                newFlight = new DDJBFlight(flightNum, origin, destination, flightTime);
-            }
-            else if (specialCode == "CFFT")
-            {
-                newFlight = new CFFTFlight(flightNum, origin, destination, flightTime);
-            }
-            else if (specialCode == "LWTT")
-            {
-                newFlight = new LWTTFlight(flightNum, origin, destination, flightTime);
-            }
-            else if (specialCode == "")
-            {
-                newFlight = new NORMFlight(flightNum, origin, destination, flightTime);
-            }
+            Flight? newFlight = CreateNewFlight(t, flightNum, origin, destination, flightTime, specialCode);
 
             t.Flights[flightNum] = newFlight;
         }
@@ -225,19 +280,20 @@ void DisplayFlightDetails(Flight flight)
     Console.WriteLine($"Origin: {flight.Origin}");
     Console.WriteLine($"Destination: {flight.Destination}");
     Console.WriteLine($"Expected Time: {flight.ExpectedTime}");
-    if (Convert.ToString(flight.GetType()) == "CFFTFlight")
+
+    if (Convert.ToString(flight.GetType()) == "PRG2_Assignment.CFFTFlight")
     {
         Console.WriteLine($"Special Request Code: CFFT");
     }
-    else if (Convert.ToString(flight.GetType()) == "DDJBFlight")
+    else if (Convert.ToString(flight.GetType()) == "PRG2_Assignment.DDJBFlight")
     {
         Console.WriteLine($"Special Request Code: DDJB");
     }
-    else if (Convert.ToString(flight.GetType()) == "LWTTFlight")
+    else if (Convert.ToString(flight.GetType()) == "PRG2_Assignment.LWTTFlight")
     {
         Console.WriteLine($"Special Request Code: LWTT");
     }
-    else if (Convert.ToString(flight.GetType()) == "NORMFlight")
+    else if (Convert.ToString(flight.GetType()) == "PRG2_Assignment.NORMFlight")
     {
         Console.WriteLine($"Special Request Code: None");
     }
@@ -281,5 +337,14 @@ void UpdateFlightStatus(Flight flight)
     else if (choice == "N")
     {
         flight.Status = "On Time";
+    }
+}
+
+void AppendFlightData(Flight flight, string specialCode)
+{
+    using (StreamWriter sw = new StreamWriter("flights.csv", true))
+    {
+        string data = $"{flight.FlightNumber},{flight.Origin},{flight.Destination},{flight.ExpectedTime.ToString("h:mm tt")},{specialCode}";
+        sw.WriteLine(data);
     }
 }
