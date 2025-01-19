@@ -21,10 +21,6 @@ DisplayLoading(terminal);
 while (true)
 {
     DisplayMenu();
-    foreach (Flight f in terminal.Flights.Values)
-    {
-        Console.WriteLine(f);
-    }
     
     int option = Convert.ToInt32(Console.ReadLine());
     if (option == 1)
