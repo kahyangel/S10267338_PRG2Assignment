@@ -375,7 +375,7 @@ void DisplayMenu()
     }
     else if (Convert.ToString(f.GetType()) == "S10267338_PRG2Assignment.DDJBFlight")
     {
-        specialCode = "DDJB";
+        specialCode = "DDJBF";
     }
     else if (Convert.ToString(f.GetType()) == "S10267338_PRG2Assignment.LWTTFlight")
     {
@@ -455,7 +455,7 @@ Flight? CreateNewFlight(Terminal t, string flightNum, string origin, string dest
     {
         newFlight = new LWTTFlight(flightNum, origin, destination, flightTime);
     }
-    else if (specialCode == "None")
+    else if (specialCode == "")
     {
         newFlight = new NORMFlight(flightNum, origin, destination, flightTime);
     }
@@ -467,10 +467,10 @@ void LoadFlights(Terminal t)
 {
     using (StreamReader sr = new StreamReader("flights.csv"))
     {
-        // Reads the header of "flights.csv"
+        // Reads the header of flights.csv
         string? s = sr.ReadLine();
 
-        // Reads the contents of "flights.csv" and creates flight objects
+        // Reads the contents of flights.csv and creates flight objects
         while ((s = sr.ReadLine()) != null)
         {
             string[] flightDetails = s.Split(",");
@@ -492,10 +492,10 @@ void LoadAirlines(Terminal t)
 {
     using (StreamReader sr = new StreamReader("airlines.csv"))
     {
-        // Reads the header of "airlines.csv"
+        // Reads the header of flights.csv
         string? s = sr.ReadLine();
 
-        // Reads the contents of "airlines.csv" and creates airline objects
+        // Reads the contents of flights.csv and creates flight objects
         while ((s = sr.ReadLine()) != null)
         {
             string[] airlineDetails = s.Split(",");
@@ -511,10 +511,10 @@ void LoadBoardingGate(Terminal t)
 {
     using (StreamReader sr = new StreamReader("boardinggates.csv"))
     {
-        // Reads the header of "boardinggates.csv"
+        // Reads the header of flights.csv
         string? s = sr.ReadLine();
 
-        // Reads the contents of "boardinggates.csv" and creates boarding gate objects
+        // Reads the contents of flights.csv and creates flight objects
         while ((s = sr.ReadLine()) != null)
         {
             string[] bgDetails = s.Split(",");
