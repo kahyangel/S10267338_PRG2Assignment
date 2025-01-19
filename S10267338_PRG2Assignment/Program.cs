@@ -3,7 +3,7 @@
 // Student Name : Tang Kah Yan (S10267338C)
 //==========================================================
 
-using PRG2_Assignment;
+
 using S10267338_PRG2Assignment;
 using System;
 using System.Globalization;
@@ -369,15 +369,15 @@ void DisplayMenu()
 
     // Retrieving the special code request
     string specialCode = "";
-    if (Convert.ToString(f.GetType()) == "PRG2_Assignment.CFFTFlight")
+    if (Convert.ToString(f.GetType()) == "S10267338_PRG2Assignment.CFFTFlight")
     {
         specialCode = "CFFT";
     }
-    else if (Convert.ToString(f.GetType()) == "PRG2_Assignment.DDJBFlight")
+    else if (Convert.ToString(f.GetType()) == "S10267338_PRG2Assignment.DDJBFlight")
     {
         specialCode = "DDJBF";
     }
-    else if (Convert.ToString(f.GetType()) == "PRG2_Assignment.LWTTFlight")
+    else if (Convert.ToString(f.GetType()) == "S10267338_PRG2Assignment.LWTTFlight")
     {
         specialCode = "LWTT";
     }
@@ -557,19 +557,19 @@ void DisplayFlightDetails(Flight flight)
     Console.WriteLine($"Destination: {flight.Destination}");
     Console.WriteLine($"Expected Time: {flight.ExpectedTime}");
 
-    if (Convert.ToString(flight.GetType()) == "PRG2_Assignment.CFFTFlight")
+    if (Convert.ToString(flight.GetType()) == "S10267338_PRG2Assignment.CFFTFlight")
     {
         Console.WriteLine($"Special Request Code: CFFT");
     }
-    else if (Convert.ToString(flight.GetType()) == "PRG2_Assignment.DDJBFlight")
+    else if (Convert.ToString(flight.GetType()) == "S10267338_PRG2Assignment.DDJBFlight")
     {
         Console.WriteLine($"Special Request Code: DDJB");
     }
-    else if (Convert.ToString(flight.GetType()) == "PRG2_Assignment.LWTTFlight")
+    else if (Convert.ToString(flight.GetType()) == "S10267338_PRG2Assignment.LWTTFlight")
     {
         Console.WriteLine($"Special Request Code: LWTT");
     }
-    else if (Convert.ToString(flight.GetType()) == "PRG2_Assignment.NORMFlight")
+    else if (Convert.ToString(flight.GetType()) == "S10267338_PRG2Assignment.NORMFlight")
     {
         Console.WriteLine($"Special Request Code: None");
     }
