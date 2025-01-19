@@ -21,6 +21,10 @@ DisplayLoading(terminal);
 while (true)
 {
     DisplayMenu();
+    foreach (Flight f in terminal.Flights.Values)
+    {
+        Console.WriteLine(f);
+    }
     
     int option = Convert.ToInt32(Console.ReadLine());
     if (option == 1)
@@ -331,7 +335,8 @@ while (true)
     }
     else if (option == 0)
     {
-
+        Console.WriteLine("Goodbye!");
+        break;
     }
 
     Console.WriteLine();
@@ -455,7 +460,7 @@ Flight? CreateNewFlight(Terminal t, string flightNum, string origin, string dest
     {
         newFlight = new LWTTFlight(flightNum, origin, destination, flightTime);
     }
-    else if (specialCode == "None")
+    else if (specialCode == "" || specialCode == "None")
     {
         newFlight = new NORMFlight(flightNum, origin, destination, flightTime);
     }
