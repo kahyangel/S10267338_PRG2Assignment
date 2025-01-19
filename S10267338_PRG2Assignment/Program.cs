@@ -456,7 +456,7 @@ Flight? CreateNewFlight(Terminal t, string flightNum, string origin, string dest
     {
         newFlight = new LWTTFlight(flightNum, origin, destination, flightTime);
     }
-    else if (specialCode == "None")
+    else if (specialCode == "None" || specialCode == "")
     {
         newFlight = new NORMFlight(flightNum, origin, destination, flightTime);
     }
