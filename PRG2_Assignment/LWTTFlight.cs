@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 //==========================================================
-// Student Number : S10268134D
-// Student Name : Wyse Lee Hong Yao
-// Partner Name : Tang Kah Yan
+// Student Number : S10267338C
+// Student Name : Tang Kah Yan
+// Partner Name : Wyse Lee Hong Yao
 //==========================================================
 
 namespace PRG2_Assignment
