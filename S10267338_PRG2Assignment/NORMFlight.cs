@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 // Partner Name : Wyse Lee Hong Yao
 //==========================================================
 
-namespace PRG2_Assignment
+namespace S10267338_PRG2Assignment
 {
     class NORMFlight : Flight
     {
         //Constructor
-        public NORMFlight(): base() { }
+        public NORMFlight() : base() { }
         public NORMFlight(string flightNumber, string origin, string destination, DateTime expectedTime) : base(flightNumber, origin, destination, expectedTime) { }
 
         //Methods

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 // Partner Name : Tang Kah Yan
 //==========================================================
 
-namespace PRG2_Assignment
+namespace S10267338_PRG2Assignment
 {
     abstract class Flight
     {
