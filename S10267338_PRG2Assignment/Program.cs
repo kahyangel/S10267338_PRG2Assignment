@@ -21,7 +21,10 @@ DisplayLoading(terminal);
 while (true)
 {
     DisplayMenu();
-    
+
+    // Create list of flights sorted by time
+    List<Flight> sortedFlightList = new List<Flight>();
+
     int option = Convert.ToInt32(Console.ReadLine());
     if (option == 1)
     {
@@ -266,7 +269,7 @@ while (true)
             Console.WriteLine();
             DisplayFlightDetails(flight);
 
-            //Status - (Shceduled / Unscheduled)
+            //Status - (Scheduled / Unscheduled)
             if (flight.Status != null)
             {
                 Console.WriteLine("Status: Scheduled");
@@ -327,7 +330,27 @@ while (true)
     }
     else if (option == 7)
     {
+        Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}{"Departure/Arrival Time",-26}{"Status",-16}Boarding Gate");
+        foreach (Flight f in terminal.Flights.Values)
+        {
+            sortedFlightList.Add(f);
+        }
+        sortedFlightList.Sort();
+        foreach (Flight f in sortedFlightList)
+        {
+            // Retrieve Flight Details (airline name, boarding gate, special request code)
+            var flightDetails = RetrieveFlightDetails(f.FlightNumber, f);
 
+            Console.Write($"{f.FlightNumber,-16}{flightDetails.airlineName,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime,-26}{f.Status,-16}");
+            if (flightDetails.boardingGate == "")
+            {
+                Console.WriteLine("Unassigned");
+            }
+            else
+            {
+                Console.WriteLine(flightDetails.boardingGate);
+            }
+        }
     }
     else if (option == 0)
     {
@@ -376,7 +399,7 @@ void DisplayMenu()
     }
     else if (Convert.ToString(f.GetType()) == "S10267338_PRG2Assignment.DDJBFlight")
     {
-        specialCode = "DDJBF";
+        specialCode = "DDJB";
     }
     else if (Convert.ToString(f.GetType()) == "S10267338_PRG2Assignment.LWTTFlight")
     {

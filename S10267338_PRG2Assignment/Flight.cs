@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace S10267338_PRG2Assignment
 {
-    abstract class Flight
+    abstract class Flight : IComparable<Flight>
     {
         public string FlightNumber { get; set; }
         public string Origin { get; set; }
@@ -30,6 +30,11 @@ namespace S10267338_PRG2Assignment
         }
 
         public abstract double CalculateFees();
+
+        public int CompareTo(Flight f)
+        {
+            return ExpectedTime.CompareTo(f.ExpectedTime);
+        }
 
         public override string ToString()
         {
