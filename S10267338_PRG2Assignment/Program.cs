@@ -393,15 +393,15 @@ void DisplayMenu()
 
     // Retrieving the special code request
     string specialCode = "";
-    if (Convert.ToString(f.GetType()) == "S10267338_PRG2Assignment.CFFTFlight")
+    if (f is CFFTFlight)
     {
         specialCode = "CFFT";
     }
-    else if (Convert.ToString(f.GetType()) == "S10267338_PRG2Assignment.DDJBFlight")
+    else if (f is DDJBFlight)
     {
         specialCode = "DDJB";
     }
-    else if (Convert.ToString(f.GetType()) == "S10267338_PRG2Assignment.LWTTFlight")
+    else if (f is LWTTFlight)
     {
         specialCode = "LWTT";
     }
@@ -581,19 +581,19 @@ void DisplayFlightDetails(Flight flight)
     Console.WriteLine($"Destination: {flight.Destination}");
     Console.WriteLine($"Expected Time: {flight.ExpectedTime}");
 
-    if (Convert.ToString(flight.GetType()) == "S10267338_PRG2Assignment.CFFTFlight")
+    if (flight is CFFTFlight)
     {
         Console.WriteLine($"Special Request Code: CFFT");
     }
-    else if (Convert.ToString(flight.GetType()) == "S10267338_PRG2Assignment.DDJBFlight")
+    else if (flight is DDJBFlight)
     {
         Console.WriteLine($"Special Request Code: DDJB");
     }
-    else if (Convert.ToString(flight.GetType()) == "S10267338_PRG2Assignment.LWTTFlight")
+    else if (flight is LWTTFlight)
     {
         Console.WriteLine($"Special Request Code: LWTT");
     }
-    else if (Convert.ToString(flight.GetType()) == "S10267338_PRG2Assignment.NORMFlight")
+    else if (flight is NORMFlight)
     {
         Console.WriteLine($"Special Request Code: None");
     }
