@@ -297,7 +297,7 @@ while (true)
         }
 
         // [2] Delete Flight Selection
-        if (choice == 2)
+        else if (choice == 2)
         {
             // Confirmation
             Console.WriteLine();
@@ -330,7 +330,7 @@ while (true)
     }
     else if (option == 7)
     {
-        Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}{"Departure/Arrival Time",-26}{"Status",-16}Boarding Gate");
+        Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-21}{"Origin",-21}{"Destination",-19}{"Departure/Arrival Time",-26}{"Status",-10}{"Special Request Code",-24}Boarding Gate");
         foreach (Flight f in terminal.Flights.Values)
         {
             sortedFlightList.Add(f);
@@ -341,7 +341,16 @@ while (true)
             // Retrieve Flight Details (airline name, boarding gate, special request code)
             var flightDetails = RetrieveFlightDetails(f.FlightNumber, f);
 
-            Console.Write($"{f.FlightNumber,-16}{flightDetails.airlineName,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime,-26}{f.Status,-16}");
+            Console.Write($"{f.FlightNumber,-16}{flightDetails.airlineName,-21}{f.Origin,-21}{f.Destination,-19}{f.ExpectedTime,-26}{f.Status,-10}");
+            if (flightDetails.specialCode == "")
+            {
+                Console.Write($"{"None", -24}");
+            }
+            else
+            {
+                Console.Write($"{flightDetails.specialCode,-24}");
+            }
+
             if (flightDetails.boardingGate == "")
             {
                 Console.WriteLine("Unassigned");
