@@ -25,20 +25,30 @@ namespace S10267338_PRG2Assignment
             Code = code;
         }
 
-        //public bool AddFlight(Flight)
-        //{
-
-        //}
+        public bool AddFlight(Flight f)
+        {
+            if (Flights.ContainsKey(f.FlightNumber))
+            {
+                return false;
+            }
+            Flights[f.FlightNumber] = f;
+            return true;
+        }
 
         //public double CalculateFees()
         //{
 
         //}
 
-        //public bool RemoveFlight(Flight)
-        //{
-
-        //}
+        public bool RemoveFlight(Flight f)
+        {
+            if (Flights.ContainsKey(f.FlightNumber))
+            {
+                Flights.Remove(f.FlightNumber);
+                return true;
+            }
+            return false;
+        }
 
         public override string ToString()
         {
