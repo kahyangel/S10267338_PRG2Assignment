@@ -171,7 +171,7 @@ while (true)
         // Display the flight details
         Console.WriteLine();
         Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}{"Expected Departure/Arrival Time",-35}{"Special Request Code",-23}Boarding Gate");
-        Console.WriteLine($"{f.FlightNumber,-16}{a.Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGate}");
+        Console.WriteLine($"{f.FlightNumber,-16}{a.Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGateName}");
     }
     // Basic Feature 8: Modify flight details
     else if (option == 6)
@@ -346,7 +346,7 @@ while (true)
                 // Retrieve Flight Details (airline name, boarding gate, special request code)
                 var flightDetails = RetrieveFlightDetails(flightNum, f);
 
-                Console.WriteLine($"{f.FlightNumber,-16}{terminal.GetAirlineFromFlight(f).Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGate}");
+                Console.WriteLine($"{f.FlightNumber,-16}{terminal.GetAirlineFromFlight(f).Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGateName}");
             }
         }
     }
@@ -379,13 +379,13 @@ while (true)
                 Console.Write($"{flightDetails.specialCode,-24}");
             }
 
-            if (flightDetails.boardingGate == "")
+            if (flightDetails.boardingGateName == "")
             {
                 Console.WriteLine("Unassigned");
             }
             else
             {
-                Console.WriteLine(flightDetails.boardingGate);
+                Console.WriteLine(flightDetails.boardingGateName);
             }
         }
     }
