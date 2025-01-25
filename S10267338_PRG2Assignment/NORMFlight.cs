@@ -19,6 +19,7 @@ namespace S10267338_PRG2Assignment
         public NORMFlight(string flightNumber, string origin, string destination, DateTime expectedTime) : base(flightNumber, origin, destination, expectedTime) { }
 
         //Methods
+        /*
         public override double CalculateFees()
         {
             double totalFee = 300;
@@ -32,10 +33,12 @@ namespace S10267338_PRG2Assignment
             }
             return totalFee;
         }
+        
 
         public override string ToString()
         {
             return base.ToString() + $"Fees: ${CalculateFees():F2}";
         }
+        */
     }
 }

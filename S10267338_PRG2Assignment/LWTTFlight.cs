@@ -25,6 +25,7 @@ namespace S10267338_PRG2Assignment
         }
 
         //Methods
+        /*
         public override double CalculateFees()
         {
             double totalFee = 300 + RequestFee;
@@ -38,10 +39,11 @@ namespace S10267338_PRG2Assignment
             }
             return totalFee;
         }
-
+        
         public override string ToString()
         {
             return base.ToString() + $"Fees: ${CalculateFees():F2}";
         }
+        */
     }
 }

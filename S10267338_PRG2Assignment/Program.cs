@@ -9,6 +9,7 @@ using System;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Transactions;
+using System.Xml.Serialization;
 
 // Create Terminal object
 Terminal terminal = new Terminal("Terminal 5");
@@ -283,14 +284,28 @@ while (true)
         // Displaying flight details of chosen airline
         Console.WriteLine();
         DisplayChosenAirlineFlightDetails(terminal);
+        string flightNumber;
+        Flight f;
 
-        // Prompt user for flight number
-        Console.WriteLine();
-        Console.Write("Select a flight number: ");
-        string? flightNumber = Console.ReadLine();
+        // Checking if flight number exists / is valid
+        while (true)
+        {
+            try
+            {
+                // Prompt user for flight number
+                Console.WriteLine();
+                Console.Write("Select a flight number: ");
+                flightNumber = Console.ReadLine();
 
-        // Retrieve flight object using flight number
-        Flight f = terminal.Flights[flightNumber];
+                // Retrieve flight object using flight number
+                f = terminal.Flights[flightNumber];
+                break;
+            }
+            catch (KeyNotFoundException ex)
+            {
+                Console.WriteLine("Please enter an existing flight number e.g. TR 123.");
+            }
+        }
 
         // Retrieve airline object using flight
         Airline a = terminal.GetAirlineFromFlight(f);
@@ -306,14 +321,34 @@ while (true)
     // Basic Feature 8: Modify flight details
     else if (option == 6)
     {
-        // Displaying flight details of chosen airline
+        // Displaying flight details of chosen airline & generating list of airline's flight numbers
         Console.WriteLine();
-        DisplayChosenAirlineFlightDetails(terminal);
+        List<string> airlineFlightNumbers = DisplayChosenAirlineFlightDetails(terminal);
 
-        // Prompt for flight number
-        Console.WriteLine();
-        Console.Write("Choose an existing Flight to modify or delete: ");
-        string? flightNum = Console.ReadLine();
+        string flightNum;
+        while (true)
+        {
+            // Prompt for flight number
+            Console.WriteLine();
+            Console.Write("Choose an existing Flight to modify or delete: ");
+            flightNum = Console.ReadLine();
+            bool validFlight = false;
+
+            // Checking if flight number exists
+            foreach(string fNum in airlineFlightNumbers)
+            {
+                if (flightNum == fNum)
+                {
+                    validFlight = true;
+                    break;
+                }
+
+            }
+            if (validFlight == true)
+            {
+                break;
+            }
+        }
 
         // Retrieve the corresponding flight object from the Flight dict
         Flight flight = terminal.Flights[flightNum];
@@ -324,7 +359,27 @@ while (true)
         Console.WriteLine("2. Delete Flight");
         Console.WriteLine();
         Console.Write("Choose an option: ");
-        int choice = Convert.ToInt32(Console.ReadLine());
+
+        int choice;
+        while (true)
+        {
+            try
+            {
+                choice = Convert.ToInt32(Console.ReadLine());
+                if (choice != 1 && choice != 2)
+                {
+                    Console.WriteLine("Please enter a valid option.");
+                    continue;
+                }
+                break;
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Please enter a valid option.");
+                continue;
+            }
+            
+        }
 
         // [1] Modify Flight Selection
         if (choice == 1)
@@ -336,20 +391,77 @@ while (true)
             Console.WriteLine("4. Modify Boarding Gate");
             Console.WriteLine();
             Console.Write("Choose an option: ");
-            int modificationOption = Convert.ToInt32(Console.ReadLine());
+
+            int modificationOption;
+            while (true)
+            {
+                try
+                {
+                    modificationOption = Convert.ToInt32(Console.ReadLine());
+                    if (choice != 1 && choice != 2 && choice != 3 && choice != 4)
+                    {
+                        Console.WriteLine("Please enter a valid option.");
+                        continue;
+                    }
+                    break;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Please enter a valid option.");
+                    continue;
+                }
+            }
 
             // (1.1) Modify Flight Option
             if (modificationOption == 1)
             {
-                Console.WriteLine();
-                Console.Write("Enter new Origin: ");
-                string? origin = Console.ReadLine();
+                string origin;
+                while (true)
+                {
+                    Console.WriteLine();
+                    Console.Write("Enter new Origin: ");
+                    origin = Console.ReadLine();
 
-                Console.Write("Enter new Destination: ");
-                string? destination = Console.ReadLine();
+                    if (!IsValidFormatCountry(origin))
+                    {
+                        Console.WriteLine("Invalid format. Please enter in the format: Country (XXX).");
+                        Console.WriteLine();
+                        continue;
+                    }
+                    break;
+                }
 
-                Console.Write("Enter new Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
-                DateTime expectedTime = Convert.ToDateTime(Console.ReadLine());
+                string destination;
+                while (true)
+                {
+                    Console.Write("Enter new Destination: ");
+                    destination = Console.ReadLine();
+
+                    if (!IsValidFormatCountry(destination))
+                    {
+                        Console.WriteLine("Invalid format. Please enter in the format: Country (XXX).");
+                        Console.WriteLine();
+                        continue;
+                    }
+                    break;
+                }
+
+                DateTime expectedTime;
+                while (true)
+                {
+                    try
+                    {
+                        Console.Write("Enter new Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
+                        expectedTime = Convert.ToDateTime(Console.ReadLine());
+                        break;
+                    }
+                    catch (FormatException ex)
+                    {
+                        Console.WriteLine("Please enter a valid date and time in the mentioned format e.g. 01/01/2025 00:00");
+                        Console.WriteLine();
+                        continue;
+                    }
+                }
 
                 foreach (Flight f in terminal.Flights.Values)
                 {
@@ -376,9 +488,23 @@ while (true)
             else if (modificationOption == 3)
             {
                 // Prompt for new Special Request Code
-                Console.WriteLine();
-                Console.Write("Enter new Special Request Code (CFFT/DDJB/LWTT/None): ");
-                string? specialCode = Console.ReadLine();
+                string specialCode;
+                while (true)
+                {
+                    Console.WriteLine();
+                    Console.Write("Enter new Special Request Code (CFFT/DDJB/LWTT/None): ");
+                    specialCode = Console.ReadLine().ToUpper();
+
+                    if (specialCode == "CFFT" || specialCode == "DDJB" || specialCode == "LWTT" || specialCode == "NONE")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter a valid code that is shown in brackets");
+                        Console.WriteLine();
+                    }
+                }
 
                 // Change the Type of Flight
                 if (specialCode == "CFFT")
@@ -405,10 +531,23 @@ while (true)
             // (1.4) Modify new Boarding Gate
             else if (modificationOption == 4)
             {
+                string boardingGate;
                 // Prompt for new Boarding Gate
-                Console.WriteLine();
-                Console.Write("Enter new Boarding Gate: ");
-                string? boardingGate = Console.ReadLine();
+                while (true)
+                {
+                    try
+                    {
+                        Console.WriteLine();
+                        Console.Write("Enter new Boarding Gate: ");
+                        boardingGate = Console.ReadLine();
+                        BoardingGate bGate = terminal.BoardingGates[boardingGate];
+                        break;
+                    }
+                    catch (KeyNotFoundException ex)
+                    {
+                        Console.WriteLine("Please enter a valid boarding gate.");
+                    }
+                }
 
                 // Update the Flight Property in the BoardingGate object 
                 foreach (BoardingGate g in terminal.BoardingGates.Values)
@@ -463,10 +602,12 @@ while (true)
                 Console.WriteLine("Flight deleted!");
             }
 
-            else if (confirmation == "N")
+            else if (confirmation != "N")
             {
+                Console.WriteLine("Please enter a valid choice.");
                 continue;
             }
+
 
             //Displaying new updated Flight details (all flight specifications)
             Console.WriteLine();
@@ -848,8 +989,11 @@ void AppendFlightData(Flight flight, string specialCode)
     }
 }
 
-void DisplayChosenAirlineFlightDetails(Terminal t)
+List<string> DisplayChosenAirlineFlightDetails(Terminal t)
 {
+    // Initialize a list to store airline's flight numbers
+    List<string> aFlightNumbers = new List<string>();
+
     Console.WriteLine($"{"Airline Code",-16}Airline Name");
     foreach (Airline a in t.Airlines.Values)
     {
@@ -875,10 +1019,13 @@ void DisplayChosenAirlineFlightDetails(Terminal t)
                 if (code == fCode)
                 {
                     Console.WriteLine($"{f.FlightNumber,-16}{a.Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime,-31}");
+                    // Adding the flight number to the airline's flight numbers list
+                    aFlightNumbers.Add(f.FlightNumber);
                 }
             }
         }
     }
+    return aFlightNumbers;
 }
 
 (string boardingGateName, string specialCode) RetrieveFlightDetails(string flightNumber, Flight f)
