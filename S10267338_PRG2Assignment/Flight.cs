@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace S10267338_PRG2Assignment
         public DateTime ExpectedTime { get; set; }
         public string Status { get; set; } = "Scheduled";
 
-        public Flight() { }
+        //public Flight() { }
         public Flight(string flightNumber, string origin, string destination, DateTime expectedTime)
         {
             FlightNumber = flightNumber;
@@ -29,7 +30,21 @@ namespace S10267338_PRG2Assignment
             ExpectedTime = expectedTime;
         }
 
-        //public virtual double CalculateFees();
+        public virtual double CalculateFees()
+        {
+            double totalFee = 0;
+
+            if (Origin == "SIN")
+            {
+                totalFee = 800;
+            }
+            if (Destination == "SIN")
+            {
+                totalFee = 500;
+            }
+
+            return totalFee;
+        }
 
         public int CompareTo(Flight f)
         {

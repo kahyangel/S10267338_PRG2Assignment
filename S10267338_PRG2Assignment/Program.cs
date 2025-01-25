@@ -6,8 +6,10 @@
 
 using S10267338_PRG2Assignment;
 using System;
+using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.Linq.Expressions;
+using System.Text;
 using System.Transactions;
 using System.Xml.Serialization;
 
@@ -39,7 +41,7 @@ while (true)
         Console.Write("Please select your option: ");
         option = Convert.ToInt32(Console.ReadLine());
     }
-    catch (FormatException ex)
+    catch (FormatException)
     {
         Console.WriteLine("Please enter a valid input");
         Console.WriteLine();
@@ -80,7 +82,7 @@ while (true)
                 flight = terminal.Flights[flightNum];
                 break;
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException)
             {
                 Console.WriteLine("Please enter an existing flight number e.g. TR 123");
                 Console.WriteLine();
@@ -108,7 +110,7 @@ while (true)
                 }
                 break;
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException)
             {
                 Console.WriteLine("Please enter an existing boarding gate name e.g. A20");
                 Console.WriteLine();
@@ -130,57 +132,22 @@ while (true)
         bool isCreating = true;
         while (isCreating)
         {
-            // Prompt user to enter flight details to create new flight object
-            Console.Write("Enter Flight Number: ");
-            string? flightNum = Console.ReadLine().ToUpper();
-
+            string? flightNum = null;
             string? origin = null;
             string? destination = null;
             DateTime expectedTime;
             string? specialCode = null;
 
-            //if (!terminal.Flights.ContainsKey(flightNum))
-            //{
-            //    ListFlights(terminal);
-            //    Console.WriteLine("Please enter a flight number from the above");
-            //    Console.WriteLine();
-            //    continue;
-            //}
-            string[] fNumArray = flightNum.Split(' ');
-            string fCode = fNumArray[0];
-            int? fEndNum = null;
-            try { fEndNum = Convert.ToInt32(fNumArray[1]); }
-            catch (FormatException ex) 
-            { 
-                Console.WriteLine("Please enter a 3 digit number after the flight code");
-                Console.WriteLine();
-                continue; 
-            }
-            catch (IndexOutOfRangeException ex) 
-            { 
-                Console.WriteLine("Please enter a valid flight number e.g. SQ 999");
-                Console.WriteLine();
-                continue; 
-            }
-            
-            if (fNumArray.Count() != 2 || fEndNum < 100 || fEndNum > 999)
+            while (true)
             {
-                Console.WriteLine("Please enter a valid flight number e.g. SQ 999");
-                Console.WriteLine();
-                continue;
-            }
-            else if (!terminal.Airlines.ContainsKey(fCode))
-            {
-                Console.WriteLine("Please enter a valid flight code e.g. SQ");
-                Console.WriteLine();
-                continue;
-            }
-            else if (terminal.Flights.ContainsKey(flightNum))
-            {
-                ListFlights(terminal);
-                Console.WriteLine("This flight number already exists, please enter a new flight number that is not the same as the above flights");
-                Console.WriteLine();
-                continue;
+                // Prompt user to enter flight details to create new flight object
+                Console.Write("Enter Flight Number: ");
+                flightNum = Console.ReadLine().ToUpper();
+
+                if (IsValidCreateFlightNumber(flightNum))
+                {
+                    break;
+                }
             }
 
             while (true)
@@ -219,7 +186,7 @@ while (true)
                     expectedTime = Convert.ToDateTime(Console.ReadLine());
                     break;
                 }
-                catch (FormatException ex)
+                catch (FormatException)
                 {
                     Console.WriteLine("Please enter a valid date and time in the mentioned format e.g. 01/01/2025 00:00");
                     Console.WriteLine();
@@ -284,26 +251,27 @@ while (true)
         // Displaying flight details of chosen airline
         Console.WriteLine();
         DisplayChosenAirlineFlightDetails(terminal);
-        string flightNumber;
-        Flight f;
+        string flightNum;
+        Flight? f = null;
 
         // Checking if flight number exists / is valid
         while (true)
         {
-            try
-            {
-                // Prompt user for flight number
-                Console.WriteLine();
-                Console.Write("Select a flight number: ");
-                flightNumber = Console.ReadLine();
+            Console.Write("Select a flight number: ");
+            flightNum = Console.ReadLine().ToUpper();
 
-                // Retrieve flight object using flight number
-                f = terminal.Flights[flightNumber];
-                break;
-            }
-            catch (KeyNotFoundException ex)
+            if (IsValidExistingFlightNumber(flightNum))
             {
-                Console.WriteLine("Please enter an existing flight number e.g. TR 123.");
+                try
+                {
+                    f = terminal.Flights[flightNum];
+                    break;
+                }
+                catch (KeyNotFoundException)
+                {
+                    Console.WriteLine("Please enter an existing flight code e.g. SQ");
+                    Console.WriteLine();
+                }
             }
         }
 
@@ -311,7 +279,7 @@ while (true)
         Airline a = terminal.GetAirlineFromFlight(f);
 
         // Retrieve Flight Details (airline name, boarding gate, special request code)
-        var flightDetails = RetrieveFlightDetails(flightNumber, f);
+        var flightDetails = RetrieveFlightDetails(flightNum, f);
 
         // Display the flight details
         Console.WriteLine();
@@ -323,35 +291,31 @@ while (true)
     {
         // Displaying flight details of chosen airline & generating list of airline's flight numbers
         Console.WriteLine();
-        List<string> airlineFlightNumbers = DisplayChosenAirlineFlightDetails(terminal);
 
-        string flightNum;
+        string? flightNum = null;
+        Flight? flight = null;
+        // Prompt for flight number
+        Console.WriteLine();
+
         while (true)
         {
-            // Prompt for flight number
-            Console.WriteLine();
             Console.Write("Choose an existing Flight to modify or delete: ");
-            flightNum = Console.ReadLine();
-            bool validFlight = false;
+            flightNum = Console.ReadLine().ToUpper();
 
-            // Checking if flight number exists
-            foreach(string fNum in airlineFlightNumbers)
+            if (IsValidExistingFlightNumber(flightNum))
             {
-                if (flightNum == fNum)
+                try
                 {
-                    validFlight = true;
+                    flight = terminal.Flights[flightNum];
                     break;
                 }
-
-            }
-            if (validFlight == true)
-            {
-                break;
+                catch (KeyNotFoundException)
+                {
+                    Console.WriteLine("Please enter an existing flight code e.g. SQ");
+                    Console.WriteLine();
+                }
             }
         }
-
-        // Retrieve the corresponding flight object from the Flight dict
-        Flight flight = terminal.Flights[flightNum];
 
         // Choose to Modify or Delete flight
         Console.WriteLine();
@@ -368,14 +332,14 @@ while (true)
                 choice = Convert.ToInt32(Console.ReadLine());
                 if (choice != 1 && choice != 2)
                 {
-                    Console.WriteLine("Please enter a valid option.");
+                    Console.WriteLine("Please enter either option 1 or 2.");
                     continue;
                 }
                 break;
             }
             catch (FormatException)
             {
-                Console.WriteLine("Please enter a valid option.");
+                Console.WriteLine("Please enter a valid input.");
                 continue;
             }
             
@@ -455,7 +419,7 @@ while (true)
                         expectedTime = Convert.ToDateTime(Console.ReadLine());
                         break;
                     }
-                    catch (FormatException ex)
+                    catch (FormatException)
                     {
                         Console.WriteLine("Please enter a valid date and time in the mentioned format e.g. 01/01/2025 00:00");
                         Console.WriteLine();
@@ -505,8 +469,14 @@ while (true)
                         Console.WriteLine();
                     }
                 }
+                if (specialCode == "NONE")
+                {
+                    specialCode = "None";
+                }
 
                 // Change the Type of Flight
+                terminal.Flights.Remove(flight.FlightNumber);
+                terminal.Airlines[terminal.GetAirlineFromFlight(flight).Code].RemoveFlight(flight);
                 if (specialCode == "CFFT")
                 {
                     flight = new CFFTFlight(flight.FlightNumber, flight.Origin, flight.Destination, flight.ExpectedTime);
@@ -524,6 +494,8 @@ while (true)
                 {
                     flight = new NORMFlight(flight.FlightNumber, flight.Origin, flight.Destination, flight.ExpectedTime);
                 }
+                terminal.Flights[flight.FlightNumber] = flight;
+                terminal.Airlines[terminal.GetAirlineFromFlight(flight).Code].RemoveFlight(flight);
                 Console.WriteLine();
                 Console.WriteLine("Special Request Code updated!");
             }
@@ -539,11 +511,11 @@ while (true)
                     {
                         Console.WriteLine();
                         Console.Write("Enter new Boarding Gate: ");
-                        boardingGate = Console.ReadLine();
+                        boardingGate = Console.ReadLine().ToUpper();
                         BoardingGate bGate = terminal.BoardingGates[boardingGate];
                         break;
                     }
-                    catch (KeyNotFoundException ex)
+                    catch (KeyNotFoundException)
                     {
                         Console.WriteLine("Please enter a valid boarding gate.");
                     }
@@ -593,11 +565,13 @@ while (true)
             // Confirmation
             Console.WriteLine();
             Console.Write("Are You Sure? (Y/N): ");
-            string? confirmation = Console.ReadLine();
+            string? confirmation = Console.ReadLine().ToUpper();
 
             if (confirmation == "Y")
             {
                 terminal.Flights.Remove(flightNum);
+                Airline airline = terminal.GetAirlineFromFlight(flight);
+                terminal.Airlines[airline.Code].RemoveFlight(flight);
                 Console.WriteLine();
                 Console.WriteLine("Flight deleted!");
             }
@@ -905,7 +879,7 @@ void UpdateFlightStatus(Flight flight)
                     notUpdated = false;
                     break;
                 }
-                catch (FormatException ex)
+                catch (FormatException)
                 {
                     Console.WriteLine("Please enter a valid input");
                 }
@@ -924,25 +898,106 @@ void UpdateFlightStatus(Flight flight)
     }
 }
 
-bool IsValidFormatCountry(string input)
+bool IsValidCreateFlightNumber(string flightNum)
+{
+    string[] fNumArray = flightNum.Split(' ');
+    string fCode = fNumArray[0];
+    int? fEndNum = null;
+    try { fEndNum = Convert.ToInt32(fNumArray[1]); }
+    catch (FormatException)
+    {
+        Console.WriteLine("Please enter a 3 digit number after the flight code");
+        Console.WriteLine();
+        return false;
+    }
+    catch (IndexOutOfRangeException)
+    {
+        Console.WriteLine("Please enter a valid flight number e.g. SQ 999");
+        Console.WriteLine();
+        return false;
+    }
+
+    if (fNumArray.Count() != 2 || fEndNum < 100 || fEndNum > 999)
+    {
+        Console.WriteLine("Please enter a valid flight number e.g. SQ 999");
+        Console.WriteLine();
+        return false;
+    }
+    else if (!terminal.Airlines.ContainsKey(fCode))
+    {
+        Console.WriteLine("Please enter a valid flight code e.g. SQ");
+        Console.WriteLine();
+        return false;
+    }
+    else if (terminal.Flights.ContainsKey(flightNum))
+    {
+        ListFlights(terminal);
+        Console.WriteLine("This flight number already exists, please enter a new flight number that is not the same as the above flights");
+        Console.WriteLine();
+        return false;
+    }
+    return true;
+}
+
+bool IsValidExistingFlightNumber(string flightNum)
+{
+    string[] fNumArray = flightNum.Split(' ');
+    string fCode = fNumArray[0];
+    int? fEndNum = null;
+    try { fEndNum = Convert.ToInt32(fNumArray[1]); }
+    catch (FormatException)
+    {
+        Console.WriteLine("Please enter a 3 digit number after the flight code");
+        Console.WriteLine();
+        return false;
+    }
+    catch (IndexOutOfRangeException)
+    {
+        Console.WriteLine("Please enter a valid flight number e.g. SQ 999");
+        Console.WriteLine();
+        return false;
+    }
+
+    if (fNumArray.Count() != 2 || fEndNum < 100 || fEndNum > 999)
+    {
+        Console.WriteLine("Please enter a valid flight number e.g. SQ 999");
+        Console.WriteLine();
+        return false;
+    }
+    else if (!terminal.Airlines.ContainsKey(fCode))
+    {
+        Console.WriteLine("Please enter a valid flight code e.g. SQ");
+        Console.WriteLine();
+        return false;
+    }
+    else if (!terminal.Flights.ContainsKey(flightNum))
+    {
+        Console.WriteLine("Please enter an existing flight number");
+        Console.WriteLine();
+        return false;
+    }
+    return true;
+}
+
+bool IsValidFormatCountry(string country)
 {
     // Check if input is null or empty
-    if (string.IsNullOrEmpty(input))
+    if (string.IsNullOrEmpty(country))
     {
         return false;
     }
 
     // Check if input contains a space and parentheses
-    int openBracketIndex = input.IndexOf('(');
-    int closeBracketIndex = input.IndexOf(')');
+    int openBracketIndex = country.IndexOf('(');
+    int closeBracketIndex = country.IndexOf(')');
 
     // Validate the format
-    if (openBracketIndex > 0 && closeBracketIndex == input.Length - 1 && closeBracketIndex > openBracketIndex + 1)
+    if (openBracketIndex > 0 && closeBracketIndex == country.Length - 1 && closeBracketIndex > openBracketIndex + 1)
     {
-        string countryName = input.Substring(0, openBracketIndex).Trim();
+        string countryName = country.Substring(0, openBracketIndex).Trim();
         countryName = char.ToUpper(countryName[0]) + countryName.Substring(1).ToLower();
 
-        string countryCode = input.Substring(openBracketIndex + 1, closeBracketIndex - openBracketIndex - 1).ToUpper();
+        string countryCode = country.Substring(openBracketIndex + 1, closeBracketIndex - openBracketIndex - 1).ToUpper();
 
         // Ensure country name is not empty and country code is exactly 3 uppercase letters
         if (!string.IsNullOrWhiteSpace(countryName) && countryCode.Length == 3)
@@ -989,43 +1044,53 @@ void AppendFlightData(Flight flight, string specialCode)
     }
 }
 
-List<string> DisplayChosenAirlineFlightDetails(Terminal t)
+void DisplayChosenAirlineFlightDetails(Terminal t)
 {
-    // Initialize a list to store airline's flight numbers
-    List<string> aFlightNumbers = new List<string>();
+    string? code = null;
+    Airline? airline = null;
 
     Console.WriteLine($"{"Airline Code",-16}Airline Name");
     foreach (Airline a in t.Airlines.Values)
     {
         Console.WriteLine($"{a.Code,-16}{a.Name}");
     }
+
     // Prompt user for 2-letter airline code
     Console.WriteLine();
-    Console.Write("Enter 2-letter Airline Code: ");
-    string? code = Console.ReadLine();
-    Console.WriteLine();
-    foreach (Airline a in t.Airlines.Values)
+
+    while (true)
     {
-        if (code == a.Code)
+        try
         {
-            Console.WriteLine("=============================================");
-            Console.WriteLine($"List of Flights for {a.Name}");
-            Console.WriteLine("=============================================");
-            Console.WriteLine("Flight Number   Airline Name           Origin                 Destination            Expected Departure/Arrival Time");
-            foreach (Flight f in a.Flights.Values)
-            {
-                // Retrieving code from Flight object's FlightNumber for comparison
-                string fCode = f.FlightNumber.Split(" ")[0];
-                if (code == fCode)
-                {
-                    Console.WriteLine($"{f.FlightNumber,-16}{a.Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime,-31}");
-                    // Adding the flight number to the airline's flight numbers list
-                    aFlightNumbers.Add(f.FlightNumber);
-                }
-            }
+            Console.Write("Enter 2-letter Airline Code: ");
+            code = Console.ReadLine().ToUpper();
+
+            airline = t.Airlines[code];
+            break;
+        }
+        catch (KeyNotFoundException)
+        {
+            Console.WriteLine("Please enter an airline code e.g. SQ");
+            Console.WriteLine();
         }
     }
-    return aFlightNumbers;
+
+    Console.WriteLine();
+
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"List of Flights for {airline.Name}");
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Flight Number   Airline Name           Origin                 Destination            Expected Departure/Arrival Time");
+
+    foreach (Flight f in airline.Flights.Values)
+    {
+        // Retrieving code from Flight object's FlightNumber for comparison
+        string fCode = f.FlightNumber.Split(" ")[0];
+        if (code == fCode)
+        {
+            Console.WriteLine($"{f.FlightNumber,-16}{airline.Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime,-31}");
+        }
+    }
 }
 
 (string boardingGateName, string specialCode) RetrieveFlightDetails(string flightNumber, Flight f)
