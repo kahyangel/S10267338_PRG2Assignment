@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace S10267338_PRG2Assignment
 {
-    class Flight : IComparable<Flight>
+    abstract class Flight : IComparable<Flight>
     {
         public string FlightNumber { get; set; }
         public string Origin { get; set; }
