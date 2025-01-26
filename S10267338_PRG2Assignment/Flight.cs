@@ -34,11 +34,11 @@ namespace S10267338_PRG2Assignment
         {
             double totalFee = 0;
 
-            if (Origin == "SIN")
+            if (Origin == "Singapore (SIN)")
             {
                 totalFee = 800;
             }
-            if (Destination == "SIN")
+            else if (Destination == "Singapore (SIN)")
             {
                 totalFee = 500;
             }
