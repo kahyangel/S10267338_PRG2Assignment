@@ -27,7 +27,7 @@ namespace S10267338_PRG2Assignment
         //Methods
         public override double CalculateFees()
         {
-            return 300 + RequestFee + base.CalculateFees();
+            return RequestFee + base.CalculateFees();
         }
         
         public override string ToString()
