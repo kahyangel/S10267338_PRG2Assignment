@@ -163,6 +163,7 @@ while (true)
                 }
                 break;
             }
+            origin = char.ToUpper(origin[0]) + origin.Split(" ")[0].Substring(1).ToLower() + " " + origin.Split(" ")[1].ToUpper();
 
             while (true)
             {
@@ -177,6 +178,7 @@ while (true)
                 }
                 break;
             }
+            destination = char.ToUpper(destination[0]) + destination.Split(" ")[0].Substring(1).ToLower() + " " + destination.Split(" ")[1].ToUpper();
 
             while (true)
             { 
@@ -322,13 +324,13 @@ while (true)
         Console.WriteLine("1. Modify Flight");
         Console.WriteLine("2. Delete Flight");
         Console.WriteLine();
-        Console.Write("Choose an option: ");
 
         int choice;
         while (true)
         {
             try
             {
+                Console.Write("Choose an option: ");
                 choice = Convert.ToInt32(Console.ReadLine());
                 if (choice != 1 && choice != 2)
                 {
@@ -340,6 +342,7 @@ while (true)
             catch (FormatException)
             {
                 Console.WriteLine("Please enter a valid input.");
+                Console.WriteLine();
                 continue;
             }
             
@@ -354,13 +357,13 @@ while (true)
             Console.WriteLine("3. Modify Special Request Code");
             Console.WriteLine("4. Modify Boarding Gate");
             Console.WriteLine();
-            Console.Write("Choose an option: ");
 
             int modificationOption;
             while (true)
             {
                 try
                 {
+                    Console.Write("Choose an option: ");
                     modificationOption = Convert.ToInt32(Console.ReadLine());
                     if (choice != 1 && choice != 2 && choice != 3 && choice != 4)
                     {
@@ -372,6 +375,7 @@ while (true)
                 catch (FormatException)
                 {
                     Console.WriteLine("Please enter a valid option.");
+                    Console.WriteLine();
                     continue;
                 }
             }
@@ -518,6 +522,7 @@ while (true)
                     catch (KeyNotFoundException)
                     {
                         Console.WriteLine("Please enter a valid boarding gate.");
+                        Console.WriteLine();
                     }
                 }
 
@@ -579,6 +584,7 @@ while (true)
             else if (confirmation != "N")
             {
                 Console.WriteLine("Please enter a valid choice.");
+                Console.WriteLine();
                 continue;
             }
 
