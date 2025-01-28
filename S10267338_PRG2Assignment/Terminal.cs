@@ -69,7 +69,7 @@ namespace S10267338_PRG2Assignment
 
         public override string ToString()
         {
-            return "";
+            return $"Terminal name: {TerminalName}";
         }
     }
 }

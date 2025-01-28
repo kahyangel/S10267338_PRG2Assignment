@@ -18,32 +18,21 @@ namespace S10267338_PRG2Assignment
         public double RequestFee { get; set; }
 
         //Constructor
-        public LWTTFlight() : base() { }
+        //public LWTTFlight() : base() { }
         public LWTTFlight(string flightNumber, string origin, string destination, DateTime expectedTime) : base(flightNumber, origin, destination, expectedTime)
         {
             RequestFee = 500;
         }
 
         //Methods
-        /*
         public override double CalculateFees()
         {
-            double totalFee = 300 + RequestFee;
-            if (Origin == "SIN")
-            {
-                totalFee += 800;
-            }
-            if (Destination == "SIN")
-            {
-                totalFee += 500;
-            }
-            return totalFee;
+            return RequestFee + base.CalculateFees();
         }
         
         public override string ToString()
         {
             return base.ToString() + $"Fees: ${CalculateFees():F2}";
         }
-        */
     }
 }
