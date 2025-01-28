@@ -223,6 +223,9 @@ while (true)
             // Add the flight object into flight dictionary in terminal
             terminal.Flights[newFlight.FlightNumber] = newFlight;
 
+            // Add the flight object into airline's flight dictionary
+            terminal.GetAirlineFromFlight(newFlight).AddFlight(newFlight);
+
             // Add flight details into flights.csv
             AppendFlightData(newFlight, specialCode);
 
@@ -642,7 +645,7 @@ while (true)
     }
 
     //Advanced Feature (a): Process all unassigned flights to boarding gates in bulk
-    if (option == 8)
+    else if (option == 8)
     {
         // Initialise count to track for the number of flights that are already assigned to a boarding gate.
         int alreadyAssigned = 0;
@@ -652,7 +655,7 @@ while (true)
         {
             // Retrieve Flight's boarding gate
             var flightDetails = RetrieveFlightDetails(f.FlightNumber, f);
-            if (flightDetails.boardingGateName == null)
+            if (flightDetails.boardingGateName == "")
             {
                 noBGQueue.Enqueue(f);
             }
@@ -789,6 +792,32 @@ while (true)
         double percentage = (assignedCount / alreadyAssigned) * 100;
         Console.WriteLine($"the total number of Flights and Boarding Gates that were processed automatically over those that were already assigned in percentage: {percentage:F2}%");
     }
+    //Advanced Feature (b): Display the total fee per airline for the day
+    else if (option == 9)
+    {
+        // Check that all flights have been assigned a boarding gate
+        bool flightsAllAssigned = true;
+        foreach (Flight flight in terminal.Flights.Values)
+        {
+            if (!IsFlightAssigned(terminal, flight))
+            {
+                flightsAllAssigned = false;
+            }
+        }
+
+        // If not all flights have been assigned to a boarding gate,
+        // prompt user to assign all flights to a boarding gate before running this option again
+        if (!flightsAllAssigned)
+        {
+            Console.WriteLine("Please ensure that all unassigned flights have their boarding gates assigned before running this feature again.");
+            Console.WriteLine();
+            continue;
+        }
+
+        // Display each airline fees with discount and total fees
+        terminal.PrintAirlineFees();
+
+    }
     // Exits the program
     else if (option == 0)
     {
@@ -852,6 +881,9 @@ void LoadBoardingGate(Terminal t)
 
             // Add boarding gate object into boarding gate dictionary as the value, with boarding gate name as key
             t.AddBoardingGate(boardingGate);
+
+            // Add boarding gate fee into gate fees dictionary as value, with boarding gate name as key
+            t.GateFees[boardingGate.GateName] = boardingGate.CalculateFees();
         }
     }
 }
@@ -912,6 +944,8 @@ void DisplayMenu()
         "\n5. Display Airline Flights" +
         "\n6. Modify Flight Details" +
         "\n7. Display Flight Schedule" +
+        "\n8. Process all unassigned flights to boarding gates in bulk" +
+        "\n9. Display the total fee per airline for the day" +
         "\n0. Exit\n");
 }
 
@@ -1276,4 +1310,18 @@ void DisplayChosenAirlineFlightDetails(Terminal t)
     }
 
     return (boardingGateName, specialCode);
+}
+
+// Checks if flight is assigned to a boarding gate
+bool IsFlightAssigned(Terminal t, Flight f)
+{
+    bool assigned = false;
+    foreach (BoardingGate gate in t.BoardingGates.Values)
+    {
+        if (gate.Flight == f)
+        {
+            assigned = true;
+        }
+    }
+    return assigned;
 }

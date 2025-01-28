@@ -21,7 +21,7 @@ namespace S10267338_PRG2Assignment
         public DateTime ExpectedTime { get; set; }
         public string Status { get; set; } = "Scheduled";
 
-        //public Flight() { }
+        public Flight() { }
         public Flight(string flightNumber, string origin, string destination, DateTime expectedTime)
         {
             FlightNumber = flightNumber;

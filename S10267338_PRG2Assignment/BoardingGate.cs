@@ -20,7 +20,7 @@ namespace S10267338_PRG2Assignment
         public bool SupportsLWTT { get; set; }
         public Flight? Flight { get; set; } = null;
 
-        //public BoardingGate() { }
+        public BoardingGate() { }
         public BoardingGate(string gateName, bool supportsCFFT, bool supportsDDJB, bool supportsLWTT)
         {
             GateName = gateName;
