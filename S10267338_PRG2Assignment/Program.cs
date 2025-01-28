@@ -660,6 +660,155 @@ while (true)
             }
         }
     }
+
+    //Advanced Feature (a): Process all unassigned flights to boarding gates in bulk
+    if (option == 8)
+    {
+        // Initialise count to track for the number of flights that are already assigned to a boarding gate.
+        int alreadyAssigned = 0;
+        // For each Flight, check if a Boarding Gate is assigned; if there is none, add it to a queue. if there is +1 to the 'alreadyAssigned' count
+        Queue<Flight> noBGQueue = new Queue<Flight>();
+        foreach (Flight f in terminal.Flights.Values)
+        {
+            // Retrieve Flight's boarding gate
+            var flightDetails = RetrieveFlightDetails(f.FlightNumber, f);
+            if (flightDetails.boardingGateName == null)
+            {
+                noBGQueue.Enqueue(f);
+            }
+            else
+            {
+                alreadyAssigned++;
+            }
+        }
+
+        // Display the total number of Flights that do not have any Boarding Gate assigned yet
+        Console.WriteLine();
+        Console.WriteLine($"Total number of flights that do not have any boarding gate assigned yet: {noBGQueue.Count}");
+
+
+        // For each Boarding Gate, check if a Flight Number has been assigned
+        int bgNoFlight = 0;
+        foreach (BoardingGate g in terminal.BoardingGates.Values)
+        {
+            if (g.Flight == null)
+            {
+                bgNoFlight++;
+            }
+        }
+        // Display the total number of Boarding Gates that do not have a Flight Number assigned yet
+        Console.WriteLine($"total number of Boarding Gates that do not have a Flight Number assigned yet: {bgNoFlight}");
+
+        // Initialise lists of different categories of Boarding Gates according to their special request code
+        List<BoardingGate> bgNormList = new List<BoardingGate>();
+        List<BoardingGate> bgLWTTList = new List<BoardingGate>();
+        List<BoardingGate> bgDDJBList = new List<BoardingGate>();
+        List<BoardingGate> bgCFFTList = new List<BoardingGate>();
+        foreach (BoardingGate g in terminal.BoardingGates.Values)
+        {
+            if (g.SupportsCFFT && g.Flight == null)
+            {
+                bgCFFTList.Add(g);
+            }
+            else if (g.SupportsLWTT && g.Flight == null)
+            {
+                bgLWTTList.Add(g);
+            }
+            else if (g.SupportsDDJB && g.Flight == null)
+            {
+                bgDDJBList.Add(g);
+            }
+            else if (!g.SupportsCFFT && !g.SupportsLWTT && !g.SupportsDDJB && g.Flight == null)
+            {
+                bgNormList.Add(g);
+            }
+        }
+
+        //Initialise count for the number of flights and boarding gates that are processed and assigned
+        int assignedCount = 0;
+
+        while (noBGQueue.Count > 0)
+        {
+            // Dequeue and get the flight at the start of the queue
+            Flight currentFlight = noBGQueue.Dequeue();
+
+            // Retrive Flight's special request code
+            var flightDetails = RetrieveFlightDetails(currentFlight.FlightNumber, currentFlight);
+
+            // Check if the Flight has a Special Request Code, and assign an unassigned boarding gate to the flight.
+            if (flightDetails.specialCode == "")
+            {
+                if (bgNormList.Count > 0)
+                {
+                    bgNormList[0].Flight = currentFlight;
+                    bgNormList.Remove(bgNormList[0]);
+                    assignedCount++;
+
+                    // Display the Flight details with Basic Information (check that boarding gate is assigned to the flight)
+                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGateName}");
+                }
+                else
+                {
+                    Console.WriteLine($"Could not assign flight {currentFlight.FlightNumber} to a boarding gate as there is no suitable boarding gate available.");
+                }
+
+            }
+            else if (flightDetails.specialCode == "CFFT")
+            {
+                if (bgCFFTList.Count > 0)
+                {
+                    bgCFFTList[0].Flight = currentFlight;
+                    bgCFFTList.Remove(bgCFFTList[0]);
+                    assignedCount++;
+
+                    // Display the Flight details with Basic Information (check that boarding gate is assigned to the flight)
+                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGateName}");
+                }
+                else
+                {
+                    Console.WriteLine($"Could not assign flight {currentFlight.FlightNumber} to a boarding gate as there is no suitable boarding gate available.");
+                }
+            }
+            else if (flightDetails.specialCode == "LWTT")
+            {
+                if (bgLWTTList.Count > 0)
+                {
+                    bgLWTTList[0].Flight = currentFlight;
+                    bgLWTTList.Remove(bgLWTTList[0]);
+                    assignedCount++;
+
+                    // Display the Flight details with Basic Information (check that boarding gate is assigned to the flight)
+                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGateName}");
+                }
+                else
+                {
+                    Console.WriteLine($"Could not assign flight {currentFlight.FlightNumber} to a boarding gate as there is no suitable boarding gate available.");
+                }
+            }
+            else if (flightDetails.specialCode == "DDJB")
+            {
+                if (bgDDJBList.Count > 0)
+                {
+                    bgDDJBList[0].Flight = currentFlight;
+                    bgDDJBList.Remove(bgDDJBList[0]);
+                    assignedCount++;
+
+                    // Display the Flight details with Basic Information (check that boarding gate is assigned to the flight)
+                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGateName}");
+                }
+                else
+                {
+                    Console.WriteLine($"Could not assign flight {currentFlight.FlightNumber} to a boarding gate as there is no suitable boarding gate available.");
+                }
+            }
+        }
+        // Display the total number of Flights and Boarding Gates processed and assigned
+        Console.WriteLine($"Total number of Flights and Boarding Gates processed and assigned: {assignedCount}");
+
+        // Display the total number of Flights and Boarding Gates that were processed automatically over those that were already assigned as a percentage
+        double percentage = (assignedCount / alreadyAssigned) * 100;
+        Console.WriteLine($"the total number of Flights and Boarding Gates that were processed automatically over those that were already assigned in percentage: {percentage:F2}%");
+    }
     // Exits the program
     else if (option == 0)
     {
