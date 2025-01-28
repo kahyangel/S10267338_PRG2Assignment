@@ -84,21 +84,23 @@ namespace S10267338_PRG2Assignment
             bool moreThanFiveFlights;
 
             // Display header
-            Console.WriteLine($"{"Airline Name", -23}{"Airline Fee ($)", -15}{"Discount ($)",-10}3% discount applied");
+            Console.WriteLine($"{"Airline Name", -23}{"Airline Fee ($)", -18}{"Discount ($)",-18}3% discount applied");
 
             // For each airline, retrieve all their flights
             foreach (Airline airline in Airlines.Values)
             {
-                airlineFee = 0;
+                // Calculate airline fees before boarding gate fees before discount
+                airlineFee = airline.CalculateFees();
                 flightCount = 0;
                 moreThanFiveFlights = false;
+
                 foreach (Flight flight in airline.Flights.Values)
                 {
                     // Keeps track of number of flights
                     flightCount++;
 
                     // Calculates fee of airline before discounts
-                    airlineFee += flight.CalculateFees() + GetBoardingGateFromFlight(flight).CalculateFees();
+                    airlineFee += GetBoardingGateFromFlight(flight).CalculateFees();
 
                     // Discount for every 3 flights
                     if (flightCount % 3 == 0 && flightCount > 0)
@@ -139,7 +141,7 @@ namespace S10267338_PRG2Assignment
 
                 // Add airline fee with discount to total fees
                 totalFees += airlineFee - discount;
-                Console.WriteLine($"{airline.Name,-23}{airlineFee,-15}{discount,-10}{moreThanFiveFlights}");
+                Console.WriteLine($"{airline.Name,-23}{airlineFee,-18}{discount,-18}{moreThanFiveFlights}");
             }
 
             Console.WriteLine();

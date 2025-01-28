@@ -35,10 +35,15 @@ namespace S10267338_PRG2Assignment
             return true;
         }
 
-        //public double CalculateFees()
-        //{
-
-        //}
+        public double CalculateFees()
+        {
+            double airlineFee = 0;
+            foreach (Flight flight in Flights.Values)
+            {
+                airlineFee += flight.CalculateFees();
+            }
+            return airlineFee;
+        }
 
         public bool RemoveFlight(Flight f)
         {
