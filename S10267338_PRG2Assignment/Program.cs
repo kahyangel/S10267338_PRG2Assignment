@@ -124,6 +124,7 @@ while (true)
         // Set the Flight property in gate object to the flight assigned to the gate
         gate.Flight = flight;
 
+        Console.WriteLine();
         Console.WriteLine($"Flight {flight.FlightNumber} has been assigned to Boarding Gate {gate.GateName}!");
     }
     // Basic Feature 6: Create a new flight
@@ -262,6 +263,7 @@ while (true)
         // Checking if flight number exists / is valid
         while (true)
         {
+            Console.WriteLine();
             Console.Write("Select a flight number: ");
             flightNum = Console.ReadLine().ToUpper();
 
@@ -572,7 +574,7 @@ while (true)
         {
             // Confirmation
             Console.WriteLine();
-            Console.Write("Are You Sure? (Y/N): ");
+            Console.WriteLine("Are You Sure? (Y/N)");
             string? confirmation = Console.ReadLine().ToUpper();
 
             if (confirmation == "Y")
@@ -707,6 +709,10 @@ while (true)
             }
         }
 
+
+        Console.WriteLine();
+        Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}{"Expected Departure/Arrival Time",-35}{"Special Request Code",-23}Boarding Gate");
+
         //Initialise count for the number of flights and boarding gates that are processed and assigned
         int assignedCount = 0;
 
@@ -726,9 +732,10 @@ while (true)
                     bgNormList[0].Flight = currentFlight;
                     bgNormList.Remove(bgNormList[0]);
                     assignedCount++;
+                    var updatedDetails = RetrieveFlightDetails(currentFlight.FlightNumber, currentFlight);
 
                     // Display the Flight details with Basic Information (check that boarding gate is assigned to the flight)
-                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGateName}");
+                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{updatedDetails.boardingGateName}");
                 }
                 else
                 {
@@ -743,9 +750,10 @@ while (true)
                     bgCFFTList[0].Flight = currentFlight;
                     bgCFFTList.Remove(bgCFFTList[0]);
                     assignedCount++;
+                    var updatedDetails = RetrieveFlightDetails(currentFlight.FlightNumber, currentFlight);
 
                     // Display the Flight details with Basic Information (check that boarding gate is assigned to the flight)
-                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGateName}");
+                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{updatedDetails.boardingGateName}");
                 }
                 else
                 {
@@ -759,9 +767,10 @@ while (true)
                     bgLWTTList[0].Flight = currentFlight;
                     bgLWTTList.Remove(bgLWTTList[0]);
                     assignedCount++;
+                    var updatedDetails = RetrieveFlightDetails(currentFlight.FlightNumber, currentFlight);
 
                     // Display the Flight details with Basic Information (check that boarding gate is assigned to the flight)
-                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGateName}");
+                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{updatedDetails.boardingGateName}");
                 }
                 else
                 {
@@ -775,9 +784,10 @@ while (true)
                     bgDDJBList[0].Flight = currentFlight;
                     bgDDJBList.Remove(bgDDJBList[0]);
                     assignedCount++;
+                    var updatedDetails = RetrieveFlightDetails(currentFlight.FlightNumber, currentFlight);
 
                     // Display the Flight details with Basic Information (check that boarding gate is assigned to the flight)
-                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{flightDetails.boardingGateName}");
+                    Console.WriteLine($"{currentFlight.FlightNumber,-16}{terminal.GetAirlineFromFlight(currentFlight).Name,-23}{currentFlight.Origin,-23}{currentFlight.Destination,-23}{currentFlight.ExpectedTime,-35}{flightDetails.specialCode,-23}{updatedDetails.boardingGateName}");
                 }
                 else
                 {
@@ -785,12 +795,22 @@ while (true)
                 }
             }
         }
+
+        Console.WriteLine();
         // Display the total number of Flights and Boarding Gates processed and assigned
         Console.WriteLine($"Total number of Flights and Boarding Gates processed and assigned: {assignedCount}");
 
         // Display the total number of Flights and Boarding Gates that were processed automatically over those that were already assigned as a percentage
-        double percentage = (assignedCount / alreadyAssigned) * 100;
-        Console.WriteLine($"the total number of Flights and Boarding Gates that were processed automatically over those that were already assigned in percentage: {percentage:F2}%");
+        if (alreadyAssigned == 0)
+        {
+            Console.WriteLine();
+            Console.WriteLine("There is no Flights that are already assigned with a Boarding Gate.\nHence, the percentage of the total number of Flights and Boarding Gates that were processed automatically\nover those that were already assigned cannot be calculated.");
+        }
+        else
+        {
+            double percentage = (assignedCount / alreadyAssigned) * 100;
+            Console.WriteLine($"the total number of Flights and Boarding Gates that were processed automatically over those that were already assigned in percentage: {percentage:F2}%");
+        }
     }
     //Advanced Feature (b): Display the total fee per airline for the day
     else if (option == 9)
@@ -992,6 +1012,7 @@ void ListBoardingGates(Terminal t)
 void DisplayFlightDetails(Flight flight)
 {
     // Display flight information and special code (if any)
+    Console.WriteLine();
     Console.WriteLine($"Flight Number: {flight.FlightNumber}");
     Console.WriteLine($"Origin: {flight.Origin}");
     Console.WriteLine($"Destination: {flight.Destination}");
@@ -1035,6 +1056,7 @@ void UpdateFlightStatus(Flight flight)
 
         if (choice == "Y")
         {
+            Console.WriteLine();
             Console.WriteLine("1. Delayed");
             Console.WriteLine("2. Boarding");
             Console.WriteLine("3. On Time");
