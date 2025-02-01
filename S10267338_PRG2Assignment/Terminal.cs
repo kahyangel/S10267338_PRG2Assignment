@@ -82,6 +82,7 @@ namespace S10267338_PRG2Assignment
             double discount;
             int flightCount;
             bool moreThanFiveFlights;
+            double totalDiscount = 0;
 
             // Display header
             Console.WriteLine($"{"Airline Name", -23}{"Airline Fee ($)", -18}{"Discount ($)",-18}3% discount applied");
@@ -142,11 +143,13 @@ namespace S10267338_PRG2Assignment
 
                 // Add airline fee with discount to total fees
                 totalFees += airlineFee - discount;
+                totalDiscount += discount;
                 Console.WriteLine($"{airline.Name,-23}{airlineFee,-18:N2}{discount,-18:N2}{moreThanFiveFlights}");
             }
 
             Console.WriteLine();
             Console.WriteLine($"Total fees after discount: ${totalFees:N2}");
+            Console.WriteLine($"Percentage of subtotal discounts over total fees: {totalDiscount / totalFees * 100:F2}%");
         }
 
         public override string ToString()
