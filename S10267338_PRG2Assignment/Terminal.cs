@@ -137,7 +137,7 @@ namespace S10267338_PRG2Assignment
                 // Apply 3% discount where applicable before deduction from total fee of airline
                 if (moreThanFiveFlights)
                 {
-                    airlineFee *= 0.97;
+                    discount += airlineFee * 0.03;
                 }
 
                 // Add airline fee with discount to total fees
