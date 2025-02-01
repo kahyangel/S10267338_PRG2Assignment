@@ -101,7 +101,7 @@ namespace S10267338_PRG2Assignment
                     flightCount++;
 
                     // Calculates fee of airline before discounts
-                    airlineFee += GetBoardingGateFromFlight(flight).CalculateFees();
+                    airlineFee += GateFees[GetBoardingGateFromFlight(flight).GateName];
 
                     // Discount for every 3 flights
                     if (flightCount % 3 == 0 && flightCount > 0)
@@ -142,11 +142,11 @@ namespace S10267338_PRG2Assignment
 
                 // Add airline fee with discount to total fees
                 totalFees += airlineFee - discount;
-                Console.WriteLine($"{airline.Name,-23}{airlineFee,-18}{discount,-18}{moreThanFiveFlights}");
+                Console.WriteLine($"{airline.Name,-23}{airlineFee,-18:N2}{discount,-18:N2}{moreThanFiveFlights}");
             }
 
             Console.WriteLine();
-            Console.WriteLine("Total fees after discount: $" + totalFees);
+            Console.WriteLine($"Total fees after discount: ${totalFees:N2}");
         }
 
         public override string ToString()
