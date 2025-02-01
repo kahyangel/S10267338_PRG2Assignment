@@ -79,7 +79,7 @@ namespace S10267338_PRG2Assignment
         {
             double airlineFee;
             double totalFees = 0;
-            double discount = 0;
+            double discount;
             int flightCount;
             bool moreThanFiveFlights;
 
@@ -93,6 +93,7 @@ namespace S10267338_PRG2Assignment
                 airlineFee = airline.CalculateFees();
                 flightCount = 0;
                 moreThanFiveFlights = false;
+                discount = 0;
 
                 foreach (Flight flight in airline.Flights.Values)
                 {
