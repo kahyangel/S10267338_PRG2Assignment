@@ -83,8 +83,13 @@ namespace S10267338_PRG2Assignment
             int flightCount;
             bool moreThanFiveFlights;
             double totalDiscount = 0;
+            double totalAirlineFees = 0;
 
             // Display header
+            Console.WriteLine();
+            Console.WriteLine("=============================================");
+            Console.WriteLine("Airline Fees for Changi Airport Terminal 5");
+            Console.WriteLine("=============================================");
             Console.WriteLine($"{"Airline Name", -23}{"Airline Fee ($)", -18}{"Discount ($)",-18}3% discount applied");
 
             // For each airline, retrieve all their flights
@@ -141,13 +146,21 @@ namespace S10267338_PRG2Assignment
                     discount += airlineFee * 0.03;
                 }
 
+                // Keep track of subtotal airline fee
+                totalAirlineFees += airlineFee;
+
                 // Add airline fee with discount to total fees
                 totalFees += airlineFee - discount;
+
+                // Keep track of subtotal discount
                 totalDiscount += discount;
+                
                 Console.WriteLine($"{airline.Name,-23}{airlineFee,-18:N2}{discount,-18:N2}{moreThanFiveFlights}");
             }
 
             Console.WriteLine();
+            Console.WriteLine($"Subtotal airline fees: ${totalAirlineFees:N2}");
+            Console.WriteLine($"Subtotal discount: ${totalDiscount:N2}");
             Console.WriteLine($"Total fees after discount: ${totalFees:N2}");
             Console.WriteLine($"Percentage of subtotal discounts over total fees: {totalDiscount / totalFees * 100:F2}%");
         }
