@@ -582,6 +582,8 @@ while (true)
                 terminal.Flights.Remove(flightNum);
                 Airline airline = terminal.GetAirlineFromFlight(flight);
                 terminal.Airlines[airline.Code].RemoveFlight(flight);
+                BoardingGate gate = terminal.GetBoardingGateFromFlight(flight);
+                gate.Flight = null;
                 Console.WriteLine();
                 Console.WriteLine("Flight deleted!");
             }
